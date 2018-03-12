@@ -34,29 +34,34 @@ with tf.Session() as sess:
         image = tf.image.resize_images(image, [300, 300])
         image.set_shape((300,300,3))
 
+        image = tf.image.flip_up_down(image)
+        image = tf.image.central_crop(image, central_fraction = 0.5)
         #Get an image tenso and print its value
         image_array = sess.run(image)
         print(image_array.shape)
 
-        #using pillow library function to show the image
-        Image.fromarray(image_array.astype('uint8'), 'RGB').show()
+        # Converts a numpy array of the kind (300, 300, 3) to a Tensor of shape(300,300,3)
+        image_tensor = tf.stack(image_array)
+
+        print(image_tensor)
 
         # The expand_dims method add a new dimension
-        image_list.append(tf.expand_dims(image_array, 0))
+        image_list.append(image_tensor)
 
     # Finishes off the filename queue Coordinator
     coord.request_stop()
     coord.join(threads)
 
-    index = 0
+    # Converts all tensor to a single tensor with a 4th dimension
+    # 4 images of (300, 300, 3) can be accessed as (0, 300, 300, 3),
+    # (1, 300, 300, 3), (2, 300, 300, 3), etc.
+    image_tensor = tf.stack(image_list)
+    print(image_tensor)
 
+    summary_writer = tf.summary.FileWriter('./image_transformation', graph = sess.graph)
 
-    # Writes image summary
-    summary_writer = tf.summary.FileWriter('./image_resize', graph = sess.graph)
-
-    for image_tensor in image_list:
-         summary_str = sess.run(tf.summary.image('image -'+str(index), image_tensor))
-         summary_writer.add_summary(summary_str)
-         index += 1
+    # Write out all the images in one go
+    summary_str = sess.run(tf.summary.image('image', image_tensor, max_outputs = 4))
+    summary_writer.add_summary(summary_str)
 
     summary_writer.close()
