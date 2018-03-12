@@ -21,7 +21,7 @@ print('Square root of d : {}'.format(sess.run(sqrt)))
 print('Sum of square, power and square root : {}'.format(sess.run(final_sum)))
 print('----------------------------------------------------')
 
-writer = tf.summary.FileWriter('./tensormath', sess.graph)
+writer = tf.summary.FileWriter('./tensormath_op', sess.graph)
 
 writer.close()
 sess.close()

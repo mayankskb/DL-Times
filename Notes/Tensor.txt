@@ -1,0 +1,20 @@
+Tensor:
+
+The central unit of data in Tensorflow. A tensor consist of a set of primitive value shaped into an array of any number of dimensions.
+
+These primitive value can be char, int, float or any other.
+
+Single valued data is referred to as 0-D data or 'scalars'
+One dimensions data is said to as 1-D tensors or 'Vectors'
+Two dimensions data is said to as 2-D tensors or 'Matrices'
+Multi - dimensional data is said to as N-D tensors or 'N-dimensional matrices'
+
+
+Characterization of Tensors:
+
+1. Rank - The number of dimensions in a tensor.
+2. Shape - The number of elements in each dimensions.
+3. Data Type - The data type of each element in the tensor.
+
+
+For knowing rank of tensor use tf.rank(tensor) to know the rank of the tensor.
