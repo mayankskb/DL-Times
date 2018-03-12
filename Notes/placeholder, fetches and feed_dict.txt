@@ -11,3 +11,11 @@ y = x * 2
 with tf.Session() as session:
     result = session.run(y, feed_dict={x: [1, 2, 3]})
     print(result)
+
+
+
+Fetches:
+They will fetch the note of the graph that is to be computed.
+
+feed_dict:
+where we pass in the values for our placeholders.
