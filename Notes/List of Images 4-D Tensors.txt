@@ -1,0 +1,15 @@
+List of Images 4-D Tensors
+
+Tensor flow can also deal with list of images which can be referred as 4-D tensors.
+
+For representing images as one tensor of 4-D, all images needs to be of same size.
+A list of images where every images have different number of channels and different measurement cannot be represented as a 4-D Tensors.
+
+List of images in a 4-D Tensor can typically be represented as
+
+(n,x,y,c)
+
+n - number of Images
+x - length of image
+y - width of image
+c - number of channels 
