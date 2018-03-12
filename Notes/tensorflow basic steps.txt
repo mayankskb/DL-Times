@@ -1,0 +1,31 @@
+Tensor FLow Basic Steps:
+
+#import the library
+import tensorflow as tf
+
+#making constants
+hello = tf.constant('Hello, Welcome to world of tensorflow.')
+
+#creating a session object
+sess = tf.Session()
+
+#printing the tensor
+print(sess.run(hello))
+
+For visualisation in tensorflow using tensorboard do as :
+writer = tf.summary.FieldWriter(<name of the directoryto store logs>, <what to store>)
+e.g.,
+writer = tf.summary.FieldWriter('./example', sess.graph)
+
+and to view that graph from terminal run the following command
+
+tensorboard --logdir='./example'
+
+and then it will gives a url where we can view the entire computation graph
+
+Tensor flow computation are done in two Steps:
+1. Building up a graph
+2. Calculate only those parts which are of your interest
+
+This gives us an advantage
+Multiple portions of graph can be run in parallel accross machine in cluster.
