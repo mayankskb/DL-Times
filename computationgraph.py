@@ -21,7 +21,7 @@ sess.run(addn)      # will not print data becoz only session object is able to g
 
 
 # visualisation it usintg tensorboard
-writer = tf.summary.FileWriter('./computationgraph_logs', sess.graph)
+writer = tf.summary.FieldWriter('./computationgraph_logs', sess.graph)
 # first argument is directory where events to store
 # second argument is what to write
 writer.close()

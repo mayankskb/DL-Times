@@ -15,7 +15,7 @@ print(sess.run(hello))
 For visualisation in tensorflow using tensorboard do as :
 writer = tf.summary.FieldWriter(<name of the directoryto store logs>, <what to store>)
 e.g.,
-writer = tf.summary.FieldWriter('./example', sess.graph)
+writer = tf.summary.FileWriter('./example', sess.graph)
 
 and to view that graph from terminal run the following command
 
