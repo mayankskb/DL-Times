@@ -1,0 +1,5 @@
+Variables
+
+Mutable Tensor values that persist across multiple calls to Session.run()
+
+We can change the value for a variable during our program and the variable holds the assigned value for all Session.run() till the moment it is reassigned to some different value.
