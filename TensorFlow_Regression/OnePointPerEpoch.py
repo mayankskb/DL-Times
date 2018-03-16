@@ -12,3 +12,33 @@ googModel.fit(xData.reshape(-1, 1), yData.reshape(-1, 1))
 
 print(googModel.coef_)
 print(googModel.intercept_)
+
+
+
+############################################################
+#
+#  Simple Regression - one point per epoch
+#
+############################################################
+
+import tensorflow as tf
+
+# Model linear regression y = Wx + b
+W = tf.Variable(tf.zeros(1,1))
+b = tf.Variable(tf.zeros([1]))
+
+# Placeholder to feed in the returns, returns have many rows,
+# just one column
+x = tf.placeholder(tf.float32, [None, 1])
+
+Wx = tf.matmul(x, W)
+y = Wx + b
+
+# Placeholder to hold the y-labels, also returns
+y_ = tf.placeholder(tf.float32, [None, 1])
+
+# Cost function
+cost = tf.reduce_mean(tf.square(y_ - y))
+
+# Initializing the optimizer
+train_step_constant = tf.train.GradientDescentOptimizer(0.1).minimize(cost)
