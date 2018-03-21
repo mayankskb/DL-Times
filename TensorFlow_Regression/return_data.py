@@ -30,3 +30,37 @@ def read_goog_sp500_data():
 	yData = np.array(returns['Goog'])[1:]
 
 	return (xData, yData)
+
+
+
+#########################################################################
+#
+#  Return a tuple with 3 fields, the returns for Exxon Mobil, Nasdaq
+#  and oil prices.
+#
+#  Each of the returns are in the form of a 1 D array
+#
+#########################################################################
+
+def read_xom_oil_nasdaq_data():
+
+	def readFile(filename):
+		# Only read in the data and price at column 0 and 5
+		data = pd.read_csv(filename, sep=',', usecols = [0, 5], names = ['Date', 'Price'], header = 0)
+
+		# Sort the data in ascending order of date so returns can be calculated
+		data['Date'] = pd.to_datetime(data['Date'], format = '%Y-%m-%d')
+
+		data = data.sort_values(['Date'], ascending = [True])
+
+		# Exclude thae date fform teh percentage change calculation
+		returns = data[[key for key in dict(data.dtypes) if dict(data.dtypes)[key] in ['float64', 'int64']]].pct_change()
+
+		# Filter out the very first row which has no retru associated with it
+		return np.array(returns['Price'])[1:]
+
+	nasdaqData = readFile('data/NASDAQ.csv')
+	oildata = readFile('data/USO.csv')
+	xomdata = readFile('data/XOM.csv')
+
+	return (nasdaqData, oildata, xomdata)

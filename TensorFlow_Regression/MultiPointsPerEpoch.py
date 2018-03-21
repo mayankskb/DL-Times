@@ -49,45 +49,52 @@ cost_hist = tf.summary.histogram('cost', cost)
 
 # Initializing the optimizer
 train_step_constant = tf.train.GradientDescentOptimizer(0.1).minimize(cost)
+train_step_ftrl = tf.train.FtrlOptimizer(1).minimize(cost)
 
+#Total number of Points for Our x values
+dataset_size = len(xData)
 
-# Set up a method to perform the actual training. Allow us to
-# modify the optimizer used and also the number of steps
-# in the training
-def trainWithOnePointPerEpoch(steps, train_step):
-
+def trainWithMultiplePointsPerEpoch(steps, train_step, batch_size):
 	init = tf.global_variables_initializer()
 
 	with tf.Session() as sess:
 		sess.run(init)
 
 		merged_summary = tf.summary.merge_all()
-		writer = tf.summary.FileWriter('./OnePointPerEpoch_logs', sess.graph)
+		writer = tf.summary.FileWriter('./MultiPointsPerEpoch_logs', sess.graph)
 
 		for i in range(steps):
 
-			# Extract one training point
-			xs = np.array([[xData[i % len(xData)]]])
-			ys = np.array([[yData[i % len(yData)]]])
+			if dataset_size == batch_size:
+				batch_start_idx = 0
+			elif dataset_size < batch_size:
+				raise ValueError('dataset_size : %d, must be greater than batch_size : %d' % (dataset_size, batch_size))
+			else:
+				batch_start_idx = (i * batch_size) % dataset_size
 
-			feed = { x: xs, y_: ys}
+			batch_end_idx = batch_start_idx + batch_size
 
-			sess.run(train_step, feed_dict = feed)
+			# Access the x and y values in the batches
+			batch_xs = xData[batch_start_idx : batch_end_idx]
+			batch_ys = yData[batch_start_idx : batch_end_idx]
+
+			# Reshape the 1-D arrays as 2-D festure vectors with many rows and 1 column
+			feed = { x: batch_xs.reshape(-1, 1), y_: batch_ys.reshape(-1, 1) }
+
+			sess.run(train_step, feed_dict=feed)
 
 			# Write out histogram summaries
 			result = sess.run(merged_summary, feed_dict = feed)
 			writer.add_summary(result, i)
 
-			# Print result to screen for every 1000 iteration
-			if(i + 1) % 1000 == 0:
-				print('After %d iteration:' % i)
+			# Print result to screen for every 500 iterations
+			if (i + 1) % 500 == 0:
+				print('After %d iteration : ' % i)
+				print('W : %f' % sess.run(W))
+				print('b : %f' % sess.run(b))
 
-				print('W: %f' % sess.run(W))
-				print('b: %f' % sess.run(b))
-
-				print('cost: %f' % sess.run(cost, feed_dict = feed))
+				print('cost : %f' % sess.run(cost, feed_dict = feed))
 
 			writer.close()
 
-
-trainWithOnePointPerEpoch(10000, train_step_constant)
+trainWithMultiplePointsPerEpoch(5000, train_step_ftrl, len(xData))
