@@ -105,4 +105,4 @@ def trainWithMultiplePointsPerEpoch(steps, train_step, batch_size):
         print('Accuracy : {}'.format(sess.run(accuracy, feed_dict = {x: all_xs, y_: all_ys})))
 
 
-trainWithMultiplePointsPerEpoch(20000, train_step, dataset_size)
+trainWithMultiplePointsPerEpoch(30000, train_step, dataset_size)
