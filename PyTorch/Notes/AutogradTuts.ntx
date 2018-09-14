@@ -1,0 +1,11 @@
+## Autograd
+Autograd is now a core torch package for automatic differentiation. It uses a tape based system for automatic differentiation.
+
+In the forward phase, the autograd tape will remember all the operations it executed, and in the backward phase, it will replay the operations.
+
+Tensors that track history
+In autograd, if any input Tensor of an operation has requires_grad=True, the computation will be tracked. After computing the backward pass, a gradient w.r.t. this variable is accumulated into .grad attribute.
+
+There’s one more class which is very important for autograd implementation - a Function. Tensor and Function are interconnected and build up an acyclic graph, that encodes a complete history of computation. Each variable has a .grad_fn attribute that references a function that has created a function (except for Tensors created by the user - these have None as .grad_fn).
+
+If you want to compute the derivatives, you can call .backward() on a Tensor. If Tensor is a scalar (i.e. it holds a one element tensor), you don’t need to specify any arguments to backward(), however if it has more elements, you need to specify a grad_output argument that is a tensor of matching shape.
